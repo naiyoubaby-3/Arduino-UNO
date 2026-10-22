@@ -1,0 +1,25 @@
+#define RedLED 11 // LED의 각 모듈 핀을 아두이노의 PWM (펄스 폭 변조) 출력이 가능한 디지털 핀(11번,5번,3번)에 할당
+#define GreenLED 5 // 일반 디지털 핀은 완전히 켜거나 완전히 끄는 것만 가능하므로 analogWrite()을 사용해 밝기를 0~255까지 변경하려면
+#define BlueLED 3 // 전압 출력을 아날로그 방식으로 조절해 주는 기능인 PWM을 사용하기 위해 지정된 전용핀인 3,5,6,9,10,11 핀 사용
+
+void setup() {
+  pinMode(RedLED, OUTPUT); // 각 LED 핀을 신호를 출력할 수 있는 출력 모드로 설정
+  pinMode(GreenLED, OUTPUT);
+  pinMode(BlueLED, OUTPUT);
+}
+
+void loop() { 
+  for (int i=0; i<3; i++) {  // i=0일때 빨간색 제어 단계 1일때 초록색 제어 단계 2일때 파란색 제어 단계
+    for(int j=0; j<=255; j++){ // j 값이 0부터 255까지 1씩 증가하면서 출력 밝기를 서서히 올림
+      if( i==0) analogWrite(RedLED, j);
+      else if (i==1) analogWrite(GreenLED, j);
+      else if (i==2) analogWrite(BlueLED, j);
+      delay(10); // 밝기가 1단계 높아질 때마다 10ms(0.01초)씩 대기. 한 색상이 완전히 밝아지는데 약 2.56초 소요됨
+    }
+    analogWrite(RedLED, 0); // 모든 LED 핀에 0을 출력하여 다음 색상으로 넘어가기 전에 모든 LED를 소등시킴
+    analogWrite(GreenLED, 0);
+    analogWrite(BlueLED, 0); 
+  }
+}
+
+// 색상선택 외부 for 루프와 밝기 제어의 내부 for 루프 구조로 구성됨
